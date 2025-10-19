@@ -1,0 +1,23 @@
+Sub CopyDayDataToVisibleMon_AllColumns()
+    Dim ws1 As Worksheet, ws2 As Worksheet
+    Dim srcRng As Range, cell As Range
+    Dim dayIndex As Long, colCount As Long
+
+    Set ws1 = ThisWorkbook.Sheets("Sheet1")
+    Set ws2 = ThisWorkbook.Sheets("Sheet2")
+
+    ' Define the source range in Sheet1 (Days data across columns A:G)
+    Set srcRng = ws1.Range("A1:G10")
+    dayIndex = 1
+    colCount = srcRng.Columns.Count
+
+    ' Loop through visible cells in Sheet2 column A
+    For Each cell In ws2.Range("A1", ws2.Cells(ws2.Rows.Count, "A").End(xlUp)).SpecialCells(xlCellTypeVisible)
+        If cell.Value = "Mon" Then
+            ' Copy entire row (A:G) from Sheet1 into Sheet2 starting from column B
+            ws1.Range(ws1.Cells(dayIndex, 1), ws1.Cells(dayIndex, colCount)).Copy _
+                Destination:=ws2.Cells(cell.Row, 2)
+            dayIndex = dayIndex + 1
+        End If
+    Next cell
+End Sub
